@@ -24,6 +24,10 @@
   InputSigType1=Digital
   OutputCue1=testOutput
   OutputSigType1=Digital
+  OutputList2Cue1=anotherOutput
+  OutputList2SigType1=Analog
+  OutputList2Cue2=myString
+  OutputList2SigType2=Serial
   ParamCue1=[Reference Name]
   MinVariableInputs=1
   MaxVariableInputs=1
@@ -31,8 +35,8 @@
   MaxVariableInputsList2=0
   MinVariableOutputs=1
   MaxVariableOutputs=1
-  MinVariableOutputsList2=0
-  MaxVariableOutputsList2=0
+  MinVariableOutputsList2=2
+  MaxVariableOutputsList2=2
   MinVariableParams=0
   MaxVariableParams=0
   Expand=expand_separately
