@@ -1,0 +1,25 @@
+#DEFINE_CONSTANT shares 100
+
+DIGITAL_INPUT
+sendToShare[shares];
+
+ANALOG_INPUT
+_skip_,
+selectedSource,
+selectedClass,
+selectedType;
+
+ANALOG_OUTPUT
+outgoingSource[shares],
+outgoingClass[shares],
+outgoingType[shares];
+
+PUSH sendToShare
+{
+	INTEGER i;
+    i = getlastmodifiedarrayindex();
+
+	outgoingSource[i] = selectedSource;
+	outgoingClass[i] = selectedClass;
+	outgoingType[i] = selectedType;
+}

@@ -1,0 +1,103 @@
+#HELP_BEGIN
+Button presses for sources are matched up in XIO Director based
+on selected source's hostname. Hostname is parsed for type and
+classification information. The selected source's XIO number, class
+and type are outputted from the module and connect to the destination
+routing module.
+#HELP_END
+
+#DEFINE_CONSTANT numSources 100
+
+//define class constants
+#DEFINE_CONSTANT stateless 0
+#DEFINE_CONSTANT sbu 1
+#DEFINE_CONSTANT sec 2
+#DEFINE_CONSTANT coal 3
+#DEFINE_CONSTANT ts 4
+    
+//define type constants
+#DEFINE_CONSTANT workstation 1
+#DEFINE_CONSTANT codec 2
+#DEFINE_CONSTANT camera 3
+#DEFINE_CONSTANT aux 4
+
+DIGITAL_INPUT
+_skip_,
+_skip_,
+_skip_,
+selectSource[numSources];
+
+STRING_INPUT
+_skip_,
+sourceHostname[numSources][255];
+
+ANALOG_OUTPUT
+selectedSource,
+selectedClass,
+selectedType;
+
+STRING_PARAMETER
+_skip_,
+_skip_,
+_skip_,
+hostname[numSources][255];
+
+STRUCTURE stSource
+{
+	//INTEGER xio;
+	INTEGER classification;
+	INTEGER type;
+	STRING hostname[255];
+};
+
+NONVOLATILE stSource source[numSources];
+
+FUNCTION readHostnames()
+{
+	INTEGER loop;
+	STRING tempHostname[255];
+	for(loop = 1 to numSources)
+	{
+		tempHostname = source[loop].hostname;
+		source[loop].hostname = sourceHostname[loop];
+		
+		//look for type		
+		if(find("WKSTN",tempHostname)) source[loop].type = workstation;
+		else if(find("VTC",tempHostname)) source[loop].type = codec;
+		else if(find("BLURAY",tempHostname) || find("TUNER",tempHostname)) source[loop].type = aux;
+
+        //look for class
+		if(source[loop].type = aux) source[loop].classification = stateless;
+		else if(find("SBU",tempHostname)) source[loop].classification = sbu;
+		else if(find("SEC",tempHostname)) source[loop].classification = sec;
+		else if(find("COAL",tempHostname)) source[loop].classification = coal;
+		else if(find("TS",tempHostname)) source[loop].classification = ts;
+	}
+}
+
+CHANGE sourceHostname
+{
+	readHostnames();
+}
+
+PUSH selectSource
+{
+	INTEGER i,loop;
+	i = getlastmodifiedarrayindex();
+	for(loop = 1 to numSources)
+	{
+		if(source[loop].hostname = hostname[i])
+		{
+			selectedSource = loop;
+			selectedClass = source[loop].classification;
+			selectedType = source[loop].type;
+			break;
+		}
+	}
+}
+
+FUNCTION Main()
+{
+	WaitForInitializationComplete();
+	readHostnames();	
+}

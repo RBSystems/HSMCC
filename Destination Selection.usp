@@ -1,0 +1,120 @@
+#HELP_BEGIN
+Button presses for destination routes are matched to destination
+hostnames in XIO Director. Routing permissions are checked based on 
+selected classification, selected type, and room classification.
+#HELP_END
+
+#DEFINE_CONSTANT numDests 100
+
+//define class constants
+#DEFINE_CONSTANT stateless 0
+#DEFINE_CONSTANT sbu 1
+#DEFINE_CONSTANT sec 2
+#DEFINE_CONSTANT coal 3
+#DEFINE_CONSTANT ts 4
+    
+//define dest type constants
+#DEFINE_CONSTANT display 1
+#DEFINE_CONSTANT codecCam 2
+#DEFINE_CONSTANT codecContent 3
+
+//define source type constants
+#DEFINE_CONSTANT workstation 1
+#DEFINE_CONSTANT codec 2
+#DEFINE_CONSTANT camera 3
+#DEFINE_CONSTANT aux 4
+ 
+//module IO
+DIGITAL_INPUT
+routeDestination[numDests];
+
+ANALOG_INPUT
+_skip_,
+selectedSource,
+selectedClass,
+selectedType,
+roomClass;
+
+STRING_INPUT
+_skip_,
+destHostname[numDests][255];
+
+ANALOG_OUTPUT
+videoSource[numDests];
+ 
+STRING_PARAMETER hostname[numDests][255];
+  
+//global variables/functions
+STRUCTURE stDest
+{
+	INTEGER xio;
+	INTEGER classification;
+	INTEGER type;
+	STRING hostname[255];
+};
+
+NONVOLATILE stDest dest[numDests];
+
+FUNCTION readHostnames()
+{
+	INTEGER loop;
+	STRING tempHostname[255];
+	for(loop = 1 to numDests)
+	{
+		tempHostname = dest[loop].hostname;
+		dest[loop].hostname = destHostname[loop];
+		
+		//look for type		
+		if(find("DISP",tempHostname) || find("AUD",tempHostname)) dest[loop].type = display;
+		else if(find("VTC_CAM",tempHostname)) dest[loop].type = codecCam;
+		else if(find("VTC_CON",tempHostname)) dest[loop].type = codecContent;
+
+        //look for class
+		if(dest[loop].type = display) dest[loop].classification = stateless;
+		else if(find("SBU",tempHostname)) dest[loop].classification = sbu;
+		else if(find("SEC",tempHostname)) dest[loop].classification = sec;
+		else if(find("COAL",tempHostname)) dest[loop].classification = coal;
+		else if(find("TS",tempHostname)) dest[loop].classification = ts;
+	}
+}
+
+//events
+PUSH routeDestination
+{
+	INTEGER i,loop,selected;
+	i = getlastmodifiedarrayindex();
+	//loop to determine which XIO destination was picked
+    for(loop = 1 to numDests)
+	{
+		if(hostname[i] = dest[loop].hostname) 
+		{
+			selected = loop;
+			break;
+		}
+	}	
+
+	//routing permissions for display destination
+	if(dest[selected].type = display)
+	{
+		if(selectedType = codec && roomClass = selectedClass) {videoSource[selected] = selectedSource;}	//source is codec
+		else if(selectedType = workstation && roomClass >= selectedClass) videoSource[selected] = selectedSource; //source is workstation
+		else if(selectedTYpe = aux) videoSource[selected] = selectedSource; //source is aux
+	}
+     
+	//routing permissions for codec camera destination
+	else if(dest[selected].type = codecCam)	//routing permissions for codec type
+	{
+		if(selectedType = camera && roomClass = dest[selected].classification) videoSource[selected] = selectedSource; //source is camera
+	}
+
+	//routing permissions for codec content destination
+	else if(dest[selected].type = codecContent)
+	{
+		if(selectedType = workstation && 1 <= selectedClass <= dest[selected].classification) videoSource[selected] = selectedSource; //source is workstation
+	}
+}
+
+CHANGE destHostname
+{
+	readHostnames();
+}
