@@ -1,4 +1,0 @@
-DIGITAL_INPUT testInput;
-digital_output testOutput;
-ANALOG_OUTPUT anotherOutput;
-STRING_OUTPUT myString;
