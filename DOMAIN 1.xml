@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xio>
+<switch snmpCommunity="public" snmpVersion="v2c" address="10.2.1.100"/>
+<domain name="DOMAIN 1"/>
+<devices>
+<device position="1" type="transmitter" Name="DM-NVX-350-AM" Device="DM-NVX-350" IP="10.2.1.99" MAC="00107FB61563" MAddr="239.8.0.0"/>
+<device position="2" type="transmitter" Name="DM-NVX-350-AUX" Device="DM-NVX-350" IP="10.2.1.141" MAC="00107FB614CE" MAddr="239.8.0.8"/>
+<device position="3" type="transmitter" Name="DM-NVX-350-DGE" Device="DM-NVX-350" IP="10.2.1.160" MAC="00107FB60337" MAddr="239.8.0.16"/>
+<device position="1" type="receiver" Name="DM-NVX-350-DISP1" Device="DM-NVX-350" IP="10.2.1.237" MAC="00107FB602C5" MAddr="239.8.0.16"/>
+<device position="2" type="receiver" Name="DM-NVX-350-DISP2" Device="DM-NVX-350" IP="10.2.1.121" MAC="00107FB61579" MAddr="239.8.0.16"/>
+</devices>
+</xio>

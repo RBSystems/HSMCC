@@ -1,0 +1,64 @@
+#HELP_BEGIN
+Parses .xml device map exported from XIO Director. Outputs serial
+signals with hostnames for all transmitters and receivers in their
+XIO routing order (ie, txHostName[1] corresponds to XIO transmitter 1)
+#HELP_END
+
+#ENABLE_TRACE
+
+#DEFINE_CONSTANT size 5
+#DEFINE_CONSTANT filePath "\\FTP\\DOMAIN 1.xml"
+
+DIGITAL_INPUT refresh;
+STRING_OUTPUT
+txHostName[size],
+_skip_,
+rxHostName[size];
+
+FUNCTION readHostNames()
+{
+    INTEGER errorCode1,errorCode2,fileHandle,
+    loop,devStart,devEnd,startPos,endPos,tempPosition;
+    STRING fileContents[5000],tempDevice[1000],tempHostname[255];
+
+    errorCode1 = StartFileOperations();
+    if(!errorCode1)
+    {
+        fileHandle = FileOpenShared(filePath,_O_RDONLY&&_O_TEXT); //open file
+        errorCode2 = FileRead(fileHandle,fileContents,FileLength(fileHandle)); //read file contents to string
+        
+        devStart = find("devices",fileContents);
+        
+        for(loop = 1 to size*2)
+        {
+            //isolate one device line
+            devStart = find("<device position",fileContents,devStart);
+            devEnd = find("/>",fileContents,devStart);
+            tempDevice = mid(fileContents,devStart,devEnd-devStart);
+            trace("%s",tempDevice);
+
+            //parse XIO position
+            startPos = find("position",tempDevice)+10;
+            endPos = find("\x22",tempDevice,startPos);
+            tempPosition = atoi(mid(tempDevice,startPos,endPos-startPos));
+
+            //parse hostname
+            startPos = find("Name",tempDevice)+6;
+            endPos = find("\x22",tempDevice,startPos);
+            tempHostname = mid(tempDevice,startPos,endPos-startPos);
+
+            //determine device type and assign string output
+            if(find("transmitter",tempDevice)) txHostName[tempPosition] = tempHostname;
+            else if(find("receiver",tempDevice)) rxHostname[tempPosition] = tempHostname;
+
+            //determine if loop reached last device in XML 
+            //if(!find("<device position",fileContents,devEnd)) break;
+            devStart = devEnd;
+        } 
+    }
+}
+
+PUSH refresh
+{
+    readHostNames();
+}
