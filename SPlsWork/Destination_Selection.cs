@@ -28,6 +28,7 @@ namespace UserModule_DESTINATION_SELECTION
         
         
         
+        
         InOutArray<Crestron.Logos.SplusObjects.DigitalInput> ROUTEDESTINATION;
         Crestron.Logos.SplusObjects.AnalogInput SELECTEDSOURCE;
         Crestron.Logos.SplusObjects.AnalogInput SELECTEDCLASS;
@@ -44,38 +45,38 @@ namespace UserModule_DESTINATION_SELECTION
             TEMPHOSTNAME  = new CrestronString( Crestron.Logos.SplusObjects.CrestronStringEncoding.eEncodingASCII, 255, this );
             
             
-            __context__.SourceCodeLine = 62;
+            __context__.SourceCodeLine = 65;
             ushort __FN_FORSTART_VAL__1 = (ushort) ( 1 ) ;
             ushort __FN_FOREND_VAL__1 = (ushort)100; 
             int __FN_FORSTEP_VAL__1 = (int)1; 
             for ( LOOP  = __FN_FORSTART_VAL__1; (__FN_FORSTEP_VAL__1 > 0)  ? ( (LOOP  >= __FN_FORSTART_VAL__1) && (LOOP  <= __FN_FOREND_VAL__1) ) : ( (LOOP  <= __FN_FORSTART_VAL__1) && (LOOP  >= __FN_FOREND_VAL__1) ) ; LOOP  += (ushort)__FN_FORSTEP_VAL__1) 
                 { 
-                __context__.SourceCodeLine = 64;
+                __context__.SourceCodeLine = 67;
                 TEMPHOSTNAME  .UpdateValue ( _SplusNVRAM.DEST [ LOOP] . HOSTNAME  ) ; 
-                __context__.SourceCodeLine = 65;
-                _SplusNVRAM.DEST [ LOOP] . HOSTNAME  .UpdateValue ( DESTHOSTNAME [ LOOP ]  ) ; 
                 __context__.SourceCodeLine = 68;
+                _SplusNVRAM.DEST [ LOOP] . HOSTNAME  .UpdateValue ( DESTHOSTNAME [ LOOP ]  ) ; 
+                __context__.SourceCodeLine = 71;
                 if ( Functions.TestForTrue  ( ( Functions.BoolToInt ( (Functions.TestForTrue ( Functions.Find( "DISP" , TEMPHOSTNAME ) ) || Functions.TestForTrue ( Functions.Find( "AUD" , TEMPHOSTNAME ) )) ))  ) ) 
                     {
-                    __context__.SourceCodeLine = 68;
+                    __context__.SourceCodeLine = 71;
                     _SplusNVRAM.DEST [ LOOP] . TYPE = (ushort) ( 1 ) ; 
                     }
                 
                 else 
                     {
-                    __context__.SourceCodeLine = 69;
+                    __context__.SourceCodeLine = 72;
                     if ( Functions.TestForTrue  ( ( Functions.Find( "VTC_CAM" , TEMPHOSTNAME ))  ) ) 
                         {
-                        __context__.SourceCodeLine = 69;
+                        __context__.SourceCodeLine = 72;
                         _SplusNVRAM.DEST [ LOOP] . TYPE = (ushort) ( 2 ) ; 
                         }
                     
                     else 
                         {
-                        __context__.SourceCodeLine = 70;
+                        __context__.SourceCodeLine = 73;
                         if ( Functions.TestForTrue  ( ( Functions.Find( "VTC_CON" , TEMPHOSTNAME ))  ) ) 
                             {
-                            __context__.SourceCodeLine = 70;
+                            __context__.SourceCodeLine = 73;
                             _SplusNVRAM.DEST [ LOOP] . TYPE = (ushort) ( 3 ) ; 
                             }
                         
@@ -83,46 +84,46 @@ namespace UserModule_DESTINATION_SELECTION
                     
                     }
                 
-                __context__.SourceCodeLine = 73;
+                __context__.SourceCodeLine = 76;
                 if ( Functions.TestForTrue  ( ( Functions.BoolToInt (_SplusNVRAM.DEST[ LOOP ].TYPE == 1))  ) ) 
                     {
-                    __context__.SourceCodeLine = 73;
+                    __context__.SourceCodeLine = 76;
                     _SplusNVRAM.DEST [ LOOP] . CLASSIFICATION = (ushort) ( 0 ) ; 
                     }
                 
                 else 
                     {
-                    __context__.SourceCodeLine = 74;
+                    __context__.SourceCodeLine = 77;
                     if ( Functions.TestForTrue  ( ( Functions.Find( "SBU" , TEMPHOSTNAME ))  ) ) 
                         {
-                        __context__.SourceCodeLine = 74;
+                        __context__.SourceCodeLine = 77;
                         _SplusNVRAM.DEST [ LOOP] . CLASSIFICATION = (ushort) ( 1 ) ; 
                         }
                     
                     else 
                         {
-                        __context__.SourceCodeLine = 75;
+                        __context__.SourceCodeLine = 78;
                         if ( Functions.TestForTrue  ( ( Functions.Find( "SEC" , TEMPHOSTNAME ))  ) ) 
                             {
-                            __context__.SourceCodeLine = 75;
+                            __context__.SourceCodeLine = 78;
                             _SplusNVRAM.DEST [ LOOP] . CLASSIFICATION = (ushort) ( 2 ) ; 
                             }
                         
                         else 
                             {
-                            __context__.SourceCodeLine = 76;
+                            __context__.SourceCodeLine = 79;
                             if ( Functions.TestForTrue  ( ( Functions.Find( "COAL" , TEMPHOSTNAME ))  ) ) 
                                 {
-                                __context__.SourceCodeLine = 76;
+                                __context__.SourceCodeLine = 79;
                                 _SplusNVRAM.DEST [ LOOP] . CLASSIFICATION = (ushort) ( 3 ) ; 
                                 }
                             
                             else 
                                 {
-                                __context__.SourceCodeLine = 77;
+                                __context__.SourceCodeLine = 80;
                                 if ( Functions.TestForTrue  ( ( Functions.Find( "TS" , TEMPHOSTNAME ))  ) ) 
                                     {
-                                    __context__.SourceCodeLine = 77;
+                                    __context__.SourceCodeLine = 80;
                                     _SplusNVRAM.DEST [ LOOP] . CLASSIFICATION = (ushort) ( 4 ) ; 
                                     }
                                 
@@ -134,7 +135,7 @@ namespace UserModule_DESTINATION_SELECTION
                     
                     }
                 
-                __context__.SourceCodeLine = 62;
+                __context__.SourceCodeLine = 65;
                 } 
             
             
@@ -152,51 +153,51 @@ namespace UserModule_DESTINATION_SELECTION
                 ushort SELECTED = 0;
                 
                 
-                __context__.SourceCodeLine = 85;
+                __context__.SourceCodeLine = 88;
                 I = (ushort) ( Functions.GetLastModifiedArrayIndex( __SignalEventArg__ ) ) ; 
-                __context__.SourceCodeLine = 87;
+                __context__.SourceCodeLine = 90;
                 ushort __FN_FORSTART_VAL__1 = (ushort) ( 1 ) ;
                 ushort __FN_FOREND_VAL__1 = (ushort)100; 
                 int __FN_FORSTEP_VAL__1 = (int)1; 
                 for ( LOOP  = __FN_FORSTART_VAL__1; (__FN_FORSTEP_VAL__1 > 0)  ? ( (LOOP  >= __FN_FORSTART_VAL__1) && (LOOP  <= __FN_FOREND_VAL__1) ) : ( (LOOP  <= __FN_FORSTART_VAL__1) && (LOOP  >= __FN_FOREND_VAL__1) ) ; LOOP  += (ushort)__FN_FORSTEP_VAL__1) 
                     { 
-                    __context__.SourceCodeLine = 89;
+                    __context__.SourceCodeLine = 92;
                     if ( Functions.TestForTrue  ( ( Functions.BoolToInt (HOSTNAME[ I ] == _SplusNVRAM.DEST[ LOOP ].HOSTNAME))  ) ) 
                         { 
-                        __context__.SourceCodeLine = 91;
+                        __context__.SourceCodeLine = 94;
                         SELECTED = (ushort) ( LOOP ) ; 
-                        __context__.SourceCodeLine = 92;
+                        __context__.SourceCodeLine = 95;
                         break ; 
                         } 
                     
-                    __context__.SourceCodeLine = 87;
+                    __context__.SourceCodeLine = 90;
                     } 
                 
-                __context__.SourceCodeLine = 97;
+                __context__.SourceCodeLine = 100;
                 if ( Functions.TestForTrue  ( ( Functions.BoolToInt (_SplusNVRAM.DEST[ SELECTED ].TYPE == 1))  ) ) 
                     { 
-                    __context__.SourceCodeLine = 99;
+                    __context__.SourceCodeLine = 102;
                     if ( Functions.TestForTrue  ( ( Functions.BoolToInt ( (Functions.TestForTrue ( Functions.BoolToInt (SELECTEDTYPE  .UshortValue == 2) ) && Functions.TestForTrue ( Functions.BoolToInt (ROOMCLASS  .UshortValue == SELECTEDCLASS  .UshortValue) )) ))  ) ) 
                         { 
-                        __context__.SourceCodeLine = 99;
+                        __context__.SourceCodeLine = 102;
                         VIDEOSOURCE [ SELECTED]  .Value = (ushort) ( SELECTEDSOURCE  .UshortValue ) ; 
                         } 
                     
                     else 
                         {
-                        __context__.SourceCodeLine = 100;
+                        __context__.SourceCodeLine = 103;
                         if ( Functions.TestForTrue  ( ( Functions.BoolToInt ( (Functions.TestForTrue ( Functions.BoolToInt (SELECTEDTYPE  .UshortValue == 1) ) && Functions.TestForTrue ( Functions.BoolToInt ( ROOMCLASS  .UshortValue >= SELECTEDCLASS  .UshortValue ) )) ))  ) ) 
                             {
-                            __context__.SourceCodeLine = 100;
+                            __context__.SourceCodeLine = 103;
                             VIDEOSOURCE [ SELECTED]  .Value = (ushort) ( SELECTEDSOURCE  .UshortValue ) ; 
                             }
                         
                         else 
                             {
-                            __context__.SourceCodeLine = 101;
+                            __context__.SourceCodeLine = 104;
                             if ( Functions.TestForTrue  ( ( Functions.BoolToInt (SELECTEDTYPE  .UshortValue == 4))  ) ) 
                                 {
-                                __context__.SourceCodeLine = 101;
+                                __context__.SourceCodeLine = 104;
                                 VIDEOSOURCE [ SELECTED]  .Value = (ushort) ( SELECTEDSOURCE  .UshortValue ) ; 
                                 }
                             
@@ -208,13 +209,13 @@ namespace UserModule_DESTINATION_SELECTION
                 
                 else 
                     {
-                    __context__.SourceCodeLine = 105;
+                    __context__.SourceCodeLine = 108;
                     if ( Functions.TestForTrue  ( ( Functions.BoolToInt (_SplusNVRAM.DEST[ SELECTED ].TYPE == 2))  ) ) 
                         { 
-                        __context__.SourceCodeLine = 107;
+                        __context__.SourceCodeLine = 110;
                         if ( Functions.TestForTrue  ( ( Functions.BoolToInt ( (Functions.TestForTrue ( Functions.BoolToInt (SELECTEDTYPE  .UshortValue == 3) ) && Functions.TestForTrue ( Functions.BoolToInt (ROOMCLASS  .UshortValue == _SplusNVRAM.DEST[ SELECTED ].CLASSIFICATION) )) ))  ) ) 
                             {
-                            __context__.SourceCodeLine = 107;
+                            __context__.SourceCodeLine = 110;
                             VIDEOSOURCE [ SELECTED]  .Value = (ushort) ( SELECTEDSOURCE  .UshortValue ) ; 
                             }
                         
@@ -222,13 +223,13 @@ namespace UserModule_DESTINATION_SELECTION
                     
                     else 
                         {
-                        __context__.SourceCodeLine = 111;
+                        __context__.SourceCodeLine = 114;
                         if ( Functions.TestForTrue  ( ( Functions.BoolToInt (_SplusNVRAM.DEST[ SELECTED ].TYPE == 3))  ) ) 
                             { 
-                            __context__.SourceCodeLine = 113;
+                            __context__.SourceCodeLine = 116;
                             if ( Functions.TestForTrue  ( ( Functions.BoolToInt ( (Functions.TestForTrue ( Functions.BoolToInt (SELECTEDTYPE  .UshortValue == 1) ) && Functions.TestForTrue ( Functions.BoolToInt ( Functions.BoolToInt ( 1 <= SELECTEDCLASS  .UshortValue ) <= _SplusNVRAM.DEST[ SELECTED ].CLASSIFICATION ) )) ))  ) ) 
                                 {
-                                __context__.SourceCodeLine = 113;
+                                __context__.SourceCodeLine = 116;
                                 VIDEOSOURCE [ SELECTED]  .Value = (ushort) ( SELECTEDSOURCE  .UshortValue ) ; 
                                 }
                             
@@ -255,7 +256,7 @@ namespace UserModule_DESTINATION_SELECTION
         {
             SplusExecutionContext __context__ = SplusThreadStartCode(__SignalEventArg__);
             
-            __context__.SourceCodeLine = 119;
+            __context__.SourceCodeLine = 122;
             READHOSTNAMES (  __context__  ) ; 
             
             
