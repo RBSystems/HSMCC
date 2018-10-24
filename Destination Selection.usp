@@ -47,7 +47,7 @@ STRING_PARAMETER hostname[numDests][255];
 //global variables/functions
 STRUCTURE stDest
 {
-	INTEGER xio;
+	//INTEGER xio;
 	INTEGER classification;
 	INTEGER type;
 	STRING hostname[255];
