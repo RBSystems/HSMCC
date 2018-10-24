@@ -4,26 +4,8 @@ hostnames in XIO Director. Routing permissions are checked based on
 selected classification, selected type, and room classification.
 #HELP_END
 
-#DEFINE_CONSTANT numDests 100
+#USER_LIBRARY "HSMCC Constants"
 
-//define class constants
-#DEFINE_CONSTANT stateless 0
-#DEFINE_CONSTANT sbu 1
-#DEFINE_CONSTANT sec 2
-#DEFINE_CONSTANT coal 3
-#DEFINE_CONSTANT ts 4
-    
-//define dest type constants
-#DEFINE_CONSTANT display 1
-#DEFINE_CONSTANT codecCam 2
-#DEFINE_CONSTANT codecContent 3
-
-//define source type constants
-#DEFINE_CONSTANT workstation 1
-#DEFINE_CONSTANT codec 2
-#DEFINE_CONSTANT camera 3
-#DEFINE_CONSTANT aux 4
- 
 //module IO
 DIGITAL_INPUT
 routeDestination[numDests];

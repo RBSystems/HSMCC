@@ -1,0 +1,28 @@
+//define IO sizes of routing modules
+#DEFINE_CONSTANT numDests 100
+#DEFINE_CONSTANT numSources 100
+#DEFINE_CONSTANT shares 100
+
+//define class constants
+#DEFINE_CONSTANT stateless 0
+#DEFINE_CONSTANT sbu 1
+#DEFINE_CONSTANT sec 2
+#DEFINE_CONSTANT coal 3
+#DEFINE_CONSTANT ts 4
+    
+//define dest type constants
+#DEFINE_CONSTANT display 1
+#DEFINE_CONSTANT codecCam 2
+#DEFINE_CONSTANT codecContent 3
+
+//define source type constants
+#DEFINE_CONSTANT workstation 1
+#DEFINE_CONSTANT codec 2
+#DEFINE_CONSTANT camera 3
+#DEFINE_CONSTANT aux 4
+
+//define classification names
+#DEFINE_CONSTANT classNameSBU "UNCLASSIFIED"
+#DEFINE_CONSTANT classNameSEC "US SECRET"
+#DEFINE_CONSTANT classNameCOAL "COALITION SECRET"
+#DEFINE_CONSTANT classNameTS "TS/SCI"

@@ -1,4 +1,4 @@
-#DEFINE_CONSTANT shares 100
+#USER_LIBRARY "HSMCC Constants"
 
 DIGITAL_INPUT
 sendToShare[shares];
