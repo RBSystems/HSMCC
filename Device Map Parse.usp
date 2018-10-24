@@ -1,6 +1,6 @@
 #HELP_BEGIN
 Parses .xml device map exported from XIO Director. Outputs serial
-signals with hostnames for all transmitters and receivers in their
+signals with properties for all transmitters and receivers in their
 XIO routing order (ie, txHostName[1] corresponds to XIO transmitter 1)
 #HELP_END
 
@@ -12,50 +12,77 @@ XIO routing order (ie, txHostName[1] corresponds to XIO transmitter 1)
 DIGITAL_INPUT refresh;
 STRING_OUTPUT
 txHostName[size],
+txIP[size],
+txMAC[size],
+txMulticastAddress[size],
 _skip_,
-rxHostName[size];
+rxHostName[size],
+rxIP[size],
+rxMac[size];
 
-FUNCTION readHostNames()
+STRING fileContents[5000];
+
+FUNCTION readXML()
 {
-    INTEGER errorCode1,errorCode2,fileHandle,
-    loop,devStart,devEnd,startPos,endPos,tempPosition;
-    STRING fileContents[5000],tempDevice[1000],tempHostname[255];
+    INTEGER errorCode1,errorCode2,fileHandle;
 
     errorCode1 = StartFileOperations();
     if(!errorCode1)
     {
         fileHandle = FileOpenShared(filePath,_O_RDONLY&&_O_TEXT); //open file
         errorCode2 = FileRead(fileHandle,fileContents,FileLength(fileHandle)); //read file contents to string
-        
-        devStart = find("devices",fileContents);
-        
-        for(loop = 1 to size*2)
-        {
-            //isolate one device line
-            devStart = find("<device position",fileContents,devStart);
-            devEnd = find("/>",fileContents,devStart);
-            tempDevice = mid(fileContents,devStart,devEnd-devStart);
-            trace("%s",tempDevice);
+        FileClose(fileHandle);
+        EndFileOperations();
+    } else trace("Error starting file operations");
+}
 
-            //parse XIO position
-            startPos = find("position",tempDevice)+10;
-            endPos = find("\x22",tempDevice,startPos);
-            tempPosition = atoi(mid(tempDevice,startPos,endPos-startPos));
+STRING_FUNCTION parseProperty(string device,string property)
+{
+    INTEGER startPos,endPos;
+    startPos = find(property,device)+len(property)+1;
+    endPos = find("\x22",device,startPos);
+    return (mid(device,startPos,endPos-startPos));
+}
 
-            //parse hostname
-            startPos = find("Name",tempDevice)+6;
-            endPos = find("\x22",tempDevice,startPos);
-            tempHostname = mid(tempDevice,startPos,endPos-startPos);
+FUNCTION parseXML(integer newStart)
+{
+    INTEGER devStart,devEnd,startPos,endPos,tempXIO;
+    STRING tempDevice[1000],tempHostname[255],tempIP[15],tempMAC[12],tempMcast[15];
 
-            //determine device type and assign string output
-            if(find("transmitter",tempDevice)) txHostName[tempPosition] = tempHostname;
-            else if(find("receiver",tempDevice)) rxHostname[tempPosition] = tempHostname;
+    //isolate one device node
+    devStart = find("<device position",fileContents,newStart);
+    devEnd = find("/>",fileContents,devStart);
+    tempDevice = mid(fileContents,devStart,devEnd-devStart);
 
-            //determine if loop reached last device in XML 
-            //if(!find("<device position",fileContents,devEnd)) break;
-            devStart = devEnd;
-        } 
+    tempXIO = atoi(parseProperty(tempDevice,"position="));
+    tempHostname = parseProperty(tempDevice,"Name=");
+    tempIP = parseProperty(tempDevice,"IP=");
+    tempMAC = parseProperty(tempDevice,"MAC=");
+    tempMcast = parseProperty(tempDevice,"MAddr=");
+
+    //determine device type and assign string output
+    if(find("transmitter",tempDevice)) 
+    {
+        txHostName[tempXIO] = tempHostname;
+        txIP[tempXIO] = tempIP;
+        txMAC[tempXIO] = tempMAC;
+        txMulticastAddress[tempXIO] = tempMcast;
     }
+    else if(find("receiver",tempDevice))
+    {
+        rxHostName[tempXIO] = tempHostname;
+        rxIP[tempXIO] = tempIP;
+        rxMAC[tempXIO] = tempMAC;
+    }
+
+    //determine if function reached last device in XML
+    if(find("<device position",fileContents,devEnd)) parseXML(devEnd);    
+}
+
+FUNCTION readHostNames()
+{
+    readXML();
+    parseXML(1);
 }
 
 PUSH refresh
